@@ -40,7 +40,7 @@ td.title {
 
 {% block headjs %}
 <script>
-    function store_status(status) {
+    function temp_callback(status) {
         // We assume the client is offline.
         //   if it's online, then we show all tools only usable when online.
         //
@@ -51,8 +51,11 @@ td.title {
             $("#online-tools-faq-link").show();
         }
     }
-</script>
 
+    $(function(){
+        get_server_status({protocol:"{{ settings.SECURESYNC_PROTOCOL }}", hostname:"{{ central_server_host }}"}, [], temp_callback);
+    });
+</script>
 {% endblock headjs %}
 
 {% block title %}{% trans "Administration Panel" %}{% endblock title %}
@@ -60,7 +63,7 @@ td.title {
 {% block content %}
 <div id="content">
   {% trans "This page can help you administer your installation of KA Lite." %}
-  
+
     <table>
         <tr>
             <td class="title" colspan="2">
@@ -123,5 +126,4 @@ td.title {
         {% endif %}
     </table>
 </div>
-<script src="{{ settings.SECURESYNC_PROTOCOL }}://{{ central_server_host}}{% url get_server_info %}?callback=store_status"></script>
 {% endblock content %}

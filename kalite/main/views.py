@@ -309,7 +309,7 @@ def update(request):
         language_list.append(default_language)
     languages = [{"id": key, "name": language_lookup[key]} for key in language_list]
     languages = sorted(languages, key=lambda k: k["name"])
-
+    
     context = {
         "languages": languages,
         "default_language": default_language,

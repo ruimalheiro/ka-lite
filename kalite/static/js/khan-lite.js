@@ -104,7 +104,6 @@ function get_server_status(options, fields, callback) {
     var defaults = {
         protocol: "http",
         hostname: "",
-        port: 8008,
         path: SERVER_INFO_PATH
     };
 
@@ -115,13 +114,13 @@ function get_server_status(options, fields, callback) {
     if (args.hostname) {
         prefix = (args.protocol ? args.protocol + ":" : "") + "//" + args.hostname + (args.port ? ":" + args.port : "");
     }
-
+    
     // if prefix is empty, gives an absolute (local) url. If prefix, then fully qualified url.
     var request = $.ajax({
         url:  prefix + args.path,
         dataType: args.hostname ? "jsonp" : "json",
         jsonpCallback: "temp_callback", // TODO(jamalex): remove this line once the central server has this endpoint properly running
-        data: {fields: (fields || []).join(",")}
+        data: {fields: (fields || []).join(",")},
     }).success(function(data) {
         callback(data);
     }).error(function() {

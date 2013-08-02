@@ -311,8 +311,7 @@ def status(request):
 
 @return_jsonp
 def get_server_info(request):
-    """
-    This function is used to check connection to central or local server and also to get specific data from server.
+    """This function is used to check connection to central or local server and also to get specific data from server.
 
     Args:
         The http request.
