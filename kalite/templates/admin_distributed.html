@@ -40,7 +40,7 @@ td.title {
 
 {% block headjs %}
 <script>
-    function temp_callback(status) {
+    function info_callback(status) {
         // We assume the client is offline.
         //   if it's online, then we show all tools only usable when online.
         //
@@ -53,7 +53,7 @@ td.title {
     }
 
     $(function(){
-        get_server_status({protocol:"{{ settings.SECURESYNC_PROTOCOL }}", hostname:"{{ central_server_host }}"}, [], temp_callback);
+        get_server_status({protocol:"{{ settings.SECURESYNC_PROTOCOL }}", hostname:"{{ central_server_host }}"}, [], info_callback);
     });
 </script>
 {% endblock headjs %}

@@ -287,6 +287,15 @@ def return_jsonp(handler):
 
         if 'callback' in request.REQUEST:
             jsonp = '%s(%s);' % (request.REQUEST['callback'], json.content)
-            return JsonResponse(jsonp)
+            response = JsonResponse(jsonp)
+            response["Access-Control-Allow-Origin"] = "*"  
+            response["Access-Control-Allow-Methods"] = "GET, OPTIONS"  
+            response["Access-Control-Max-Age"] = "1000"
+            response["Access-Control-Allow-Headers"] = "Authorization"
+            response["Access-Control-Allow-Headers"] = "X-Requested-With"
+            response["Access-Control-Allow-Credentials"] = "true"
+            response["Content-Length"] = "0"
+            response["Content-Type"] = "text/plain"
+            return response
         return JsonResponse(json.content)
     return wrapper_fn
