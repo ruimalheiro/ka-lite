@@ -39,7 +39,7 @@ class FacilityUserForm(forms.ModelForm):
     class Meta:
         model = FacilityUser
         # Note: must preserve order
-        fields = ("facility", "group", "username", "first_name", "last_name", "password_first", "password_recheck", "is_teacher")
+        fields = ("facility", "group", "username", "first_name", "last_name", "password_first", "password_recheck", "is_teacher", "default_language")
         widgets = {
             "facility": forms.HiddenInput(),
             "is_teacher": forms.HiddenInput(),

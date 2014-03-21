@@ -467,3 +467,64 @@ class MainEmptyFormSubmitCaseTest(KALiteDistributedWithFacilityBrowserTestCase):
     def test_add_group_form(self):
         self.browser_login_admin()
         self.empty_form_test(url=self.reverse("add_group"), submission_element_id="id_name")
+
+
+class UserRegistrationFormTest(KALiteDistributedWithFacilityBrowserTestCase):
+    """Performs a test to the user registration form.
+
+    Creates an user and checks if the data matches when the user logs in and goes to the account management.
+    """
+    
+    def setUp(self):
+        super(UserRegistrationFormTest, self).setUp()
+
+    def test_registration_form(self):
+        # Default user data.
+        username = "archimedes"
+        first_name = "Archimedes"
+        last_name = "Syracuse"
+        password = "infinitesimals"
+
+        # Sign up.
+        register_url = self.reverse("add_facility_student")
+        self.browse_to(register_url)
+
+        self.browser_activate_element(id="id_username")
+        self.browser_form_fill(username)
+        self.browser_form_fill(first_name)
+        self.browser_form_fill(last_name)
+        self.browser_form_fill(password)
+        self.browser_form_fill(password)
+        
+        # Selects the last option available in default language select.
+        language_field = self.browser.find_element_by_id("id_default_language")
+        language_field_options = language_field.find_elements_by_tag_name("option")
+
+        language_value = language_field_options[len(language_field_options)-1].text
+
+        language_field_options[len(language_field_options)-1].click()
+
+        self.browser_activate_element(id="id_username")
+        self.browser_send_keys(Keys.RETURN)
+
+        self.browser_logout_user()
+
+        login_url = self.reverse("login")
+        self.browse_to(login_url)
+
+        self.browser.find_element_by_id("id_username").clear()
+        self.browser.find_element_by_id("id_username").click()
+        self.browser_form_fill(username)
+        self.browser_form_fill(password)
+        self.browser_send_keys(Keys.RETURN)
+
+        user = FacilityUser.objects.get(username=username)
+
+        edit_user_url = self.reverse("edit_facility_user", args=[user.id])
+        self.browse_to(edit_user_url)
+
+        # Compares the fields with the values in the database.
+        self.assertEqual(self.browser.find_element_by_id("id_username").get_attribute('value'), user.username)
+        self.assertEqual(self.browser.find_element_by_id("id_first_name").get_attribute('value'), user.first_name)
+        self.assertEqual(self.browser.find_element_by_id("id_last_name").get_attribute('value'), user.last_name)
+        self.assertEqual(self.browser.find_element_by_id("id_default_language").get_attribute('value'), user.default_language)
